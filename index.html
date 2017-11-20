@@ -1,37 +1,273 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-body, html {
-    height: 100%;
-}
+  <meta charset="UTF-8">
 
-.parallax {
-    /* The image used */
-    background-image: url('coffee.jpg');
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-    /* Full height */
-    height: 100%;
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-    /* Create the parallax scrolling effect */
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-</style>
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+  .col1 {
+    position: absolute;
+    background-color: #ffffff;
+    top:20vw;
+    width: 18vw;
+    height: 18vw;
+    text-align:center;
+    padding-top:7vw;
+    font-size: 3vw;
+  }
+  .col2 {
+    position: absolute;
+    background-color: #ffffff;
+    top:38vw;
+    width: 18vw;
+    height: 18vw;
+    text-align:center;
+    padding-top:7vw;
+    font-size: 3vw;
+  }
+  .col3 {
+    position: absolute;
+    background-color: #ffffff;
+    top:56vw;
+    width: 18vw;
+    height: 18vw;
+    text-align:center;
+    padding-top:7vw;
+    font-size: 3vw;
+  }
+  .col4 {
+    position: absolute;
+    background-color: #ffffff;
+    top:74vw;
+    width: 18vw;
+    height: 18vw;
+    text-align:center;
+    padding-top:7vw;
+    font-size: 3vw;
+  }
+  .col5 {
+    position: absolute;
+    background-color: #ffffff;
+    top:92vw;
+    width: 18vw;
+    height: 18vw;
+    text-align:center;
+    padding-top:7vw;
+    font-size: 3vw;
+  }
+  .wordList{
+    width: 90vw;
+    height: 5vw;
+    left: 5vw;
+    text-align:center;
+    font-size: 3vw;
+    background-color: #f5f5dc;
+    outline-color: black;
+  }
+  .separator{
+    width: 90vw;
+    height: 1px;
+    text-align:center;
+    background-color: #888888;
+
+  }
+  </style>
+  <script>
+  var board = [[],[],[],[],[]]
+  var letters = ['a','b','c','d','e']
+  var blue = "#aaaaff"
+  var red = "#ffaaaa"
+  var grey = "#aaaaaa"
+  var beige = "#f5f5dc"
+  var first
+  var blueArray = []
+  var redArray = []
+  var neutralArray = []
+  var spy = ""
+  function startup(suffix){
+    var blueArray = []
+    var redArray = []
+    var neutralArray = []
+    $.get("https://api.myjson.com/bins/"+suffix, function(data, textStatus, jqXHR) {
+      success: {
+        for(var i = 0; i < 5; i++){
+          for(var j = 0; j < 5; j++){
+
+            document.getElementById(letters[i]+letters[j]).innerHTML = data[i][j].word
+            document.getElementById(letters[i]+letters[j]).style.background = data[i][j].color
+
+          }
+        }
+        for(var i = 0; i < 5; i++){
+          for(var j = 0; j < 5; j++){
+            if(data[i][j].team == "Blue"){
+              blueArray.push(data[i][j].word)
+            }
+            if(data[i][j].team == "Red"){
+              redArray.push(data[i][j].word)
+            }
+            if(data[i][j].team == "Neutral"){
+              neutralArray.push(data[i][j].word)
+            }
+            if(data[i][j].team == "Spy"){
+              spy = data[i][j].word
+
+            }
+          }
+        }
+        for(var i = 0; i < 25; i++){
+          console.log(i)
+          for(var j = 0; j < blueArray.length; j++){
+            document.getElementById(i+1).innerHTML = blueArray[j]
+            document.getElementById(i+1).style.background = blue
+
+            i++;
+          }
+          for(var j = 0; j < redArray.length; j++){
+            document.getElementById(i+1).innerHTML = redArray[j]
+            document.getElementById(i+1).style.background = red
+
+            i++;
+          }
+          for(var j = 0; j < neutralArray.length; j++){
+            document.getElementById(i+1).innerHTML = neutralArray[j]
+            document.getElementById(i+1).style.background = beige
+
+            i++;
+          }
+          document.getElementById(i+1).innerHTML = spy
+          document.getElementById(i+1).style.background = grey
+        }
+      }
+      i = 0;
+      j = 0;
+    });
+
+    console.log(board)
+
+  }
+  console.log(board)
+  function handle(doc){
+    console.log(doc.style);
+    doc.style.background = getItem(doc.id).color
+
+  }
+  function start(){
+    startup(document.getElementById("id").value)
+  }
+  function getItem(id){
+    for(var i = 0; i < 5; i++){
+      for(var j = 0; j < 5; j++){
+        if(letters[i]+letters[j] == id){
+          return board[i][j]
+        }
+      }
+    }
+  }
+  </script>
 </head>
-<body>
 
-<div class="parallax"></div>
+<body style = "background-color:#9999aa">
+  <div class="row" style = "position:absolute">
 
-<div style="top:100;height:1000px;background-color:red;font-size:36px">
-Scroll Up and Down this page to see the parallax scrolling effect.
-This div is just here to enable scrolling.
-Tip: Try to remove the background-attachment property to remove the scrolling effect.
-</div>
+    <input id= "id" class="form-control" style = "position:absolute;left:7vw;top:1vw;height:10vw;width:45vw;" placeholder="Game ID">
+    <button type="submit" onclick = "start()" style = "position:absolute;left:55vw;top:1vw;height:10vw;width:43vw;" class="btn btn-primary">Confirm identity</button>
+  </div>
+  <div class="row">
+    <div id = "aa" style = "left:5vw;" class = "col1"  ""></div>
+    <div id = "ab" style = "left:23vw;" class = "col1" ""></div>
+    <div id = "ac" style = "left:41vw;" class = "col1" ""></div>
+    <div id = "ad" style = "left:59vw;" class = "col1" ""></div>
+    <div id = "ae" style = "left:77vw;" class = "col1" ""></div>
+  </div>
+  <div class="row">
+    <div id = "ba" style = "left:5vw;" class = "col2"  ""></div>
+    <div id = "bb" style = "left:23vw;" class = "col2" ""></div>
+    <div id = "bc" style = "left:41vw;" class = "col2" ""></div>
+    <div id = "bd" style = "left:59vw;" class = "col2" ""></div>
+    <div id = "be" style = "left:77vw;" class = "col2" ""></div>
+  </div>
+  <div class="row">
+    <div id = "ca" style = "left:5vw;" class = "col3"  ""></div>
+    <div id = "cb" style = "left:23vw;" class = "col3" ""></div>
+    <div id = "cc" style = "left:41vw;" class = "col3" ""></div>
+    <div id = "cd" style = "left:59vw;" class = "col3" ""></div>
+    <div id = "ce" style = "left:77vw;" class = "col3" ""></div>
+  </div>
+  <div class="row">
+    <div id = "da" style = "left:5vw;" class = "col4"  ""></div>
+    <div id = "db" style = "left:23vw;" class = "col4" ""></div>
+    <div id = "dc" style = "left:41vw;" class = "col4" ""></div>
+    <div id = "dd" style = "left:59vw;" class = "col4" ""></div>
+    <div id = "de" style = "left:77vw;" class = "col4" ""></div>
+  </div>
+  <div class="row">
+    <div id = "ea" style = "left:5vw;" class = "col5"  ""></div>
+    <div id = "eb" style = "left:23vw;" class = "col5" ""></div>
+    <div id = "ec" style = "left:41vw;" class = "col5" ""></div>
+    <div id = "ed" style = "left:59vw;" class = "col5" ""></div>
+    <div id = "ee" style = "left:77vw;" class = "col5" ""></div>
+  </div>
+  <div  style = "top:115vw;left:5vw;position:absolute;">
+    <div id = "1" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "2" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "3" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "4" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "5" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "6" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "7" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "8" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "9" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "10" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "11" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "12" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "13" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "14" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "15" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "16" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "17" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "18" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "19" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "20" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "21" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "22" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "23" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "24" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+    <div id = "25" class = "wordList">Hello</div>
+    <div class = "separator"></div>
+<br><br><br>
 
-<div class="parallax"></div>
-
+  </div>
 </body>
 </html>
