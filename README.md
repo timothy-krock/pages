@@ -1,2 +1,2 @@
 # pages
-Webpage for codenames mobile client
+Webpage for codenames mobile client/decoder
